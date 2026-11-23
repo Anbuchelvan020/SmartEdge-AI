@@ -60,4 +60,4 @@ Python, Streamlit, scikit-learn, pandas, NumPy, psutil.
 - Add energy measurement with hardware-level tools before making any energy claims.
 
 ## Author
-Your name, team name and hackathon name here.
+Anbuchelvan V, Tech Takers - COMPUTE 50 .
