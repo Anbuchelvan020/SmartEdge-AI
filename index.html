@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SmartEdge AI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap">
+<style>
+:root{--bg:#EDF2F3;--card:#fff;--ink:#12262D;--mut:#5B6F76;--line:#D3DEE1;--acc:#0E7C6B;--accs:#D5EEE9;--sim:#B7791F;--sims:#FBEFD5;--bad:#B4412F;--bads:#F8DDD8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1A1F;--card:#15262C;--ink:#E6F0F1;--mut:#93A9AF;--line:#26404A;--acc:#3FD0B8;--accs:#12373A;--sim:#E5A93C;--sims:#3A2F14;--bad:#F08A78;--bads:#3E1E19}}
+:root[data-theme="dark"]{--bg:#0E1A1F;--card:#15262C;--ink:#E6F0F1;--mut:#93A9AF;--line:#26404A;--acc:#3FD0B8;--accs:#12373A;--sim:#E5A93C;--sims:#3A2F14;--bad:#F08A78;--bads:#3E1E19}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Schibsted Grotesk",system-ui,sans-serif}
+header{padding:28px 20px 8px;max-width:1040px;margin:auto}
+h1{font-size:clamp(34px,6vw,60px);line-height:1;letter-spacing:-.03em;margin:0 0 10px;font-weight:800}
+.tag{color:var(--mut);max-width:60ch;margin:0}
+nav{display:flex;gap:6px;overflow-x:auto;max-width:1040px;margin:18px auto 0;padding:0 20px 8px}
+nav button{font:inherit;font-weight:500;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+nav button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+main{max-width:1040px;margin:auto;padding:12px 20px 60px}
+section[hidden]{display:none}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+h2{font-size:22px;margin:6px 0 4px;letter-spacing:-.01em}h3{font-size:16px;margin:0 0 6px}
+p.sub{color:var(--mut);margin:0 0 16px;max-width:70ch}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.lbl{color:var(--mut);font-size:14px}
+.b{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;vertical-align:middle}
+.m{background:var(--accs);color:var(--acc)}.s{background:var(--sims);color:var(--sim)}
+textarea,select,input{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px}
+textarea{min-height:110px;resize:vertical}
+.btn{font:inherit;font-weight:700;background:var(--acc);color:var(--bg);border:0;border-radius:10px;padding:10px 18px;cursor:pointer;margin-top:10px}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.flow span{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:14px}
+.flow i{color:var(--mut);font-style:normal}
+.cmp{display:grid;gap:14px;grid-template-columns:1fr 1fr;margin-top:14px}
+@media(max-width:620px){.cmp{grid-template-columns:1fr}}
+.bar{height:14px;background:var(--line);border-radius:7px;overflow:hidden;margin:6px 0 12px}
+.bar>div{height:100%;background:var(--acc);width:0;transition:width .5s}
+.bar.sim>div{background:var(--sim)}
+mark{background:var(--bads);color:var(--bad);padding:0 3px;border-radius:4px}
+.masked{background:var(--accs);color:var(--acc);padding:0 3px;border-radius:4px;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+.wrap{overflow-x:auto}canvas{width:100%;height:150px;display:block}
+.out{white-space:pre-wrap;word-break:break-word}
+.note{background:var(--sims);color:var(--ink);border-left:4px solid var(--sim);padding:10px 14px;border-radius:8px;font-size:14px;margin-top:16px}
+.rec{border-left:4px solid var(--acc);padding-left:14px;margin-top:14px}
+</style>
+</head>
+<body>
+<header>
+<h1>SmartEdge AI</h1>
+<p class="tag">Think Smart. Compute Local. Build Responsible AI. A prototype that processes suitable AI tasks on your device, protects private data, checks fairness and explains its choices.</p>
+</header>
+<nav role="tablist" id="tabs"></nav>
+<main>
+
+<section id="overview">
+<h2>Overview</h2>
+<p class="sub">Live numbers from this browser tab are tagged <span class="b m">Measured</span>. Anything that stands in for a real cloud or dataset is tagged <span class="b s">Simulated</span>.</p>
+<div class="grid">
+<div class="card"><div class="lbl">CPU threads on this device <span class="b m">Measured</span></div><div class="big" id="o-cpu">–</div></div>
+<div class="card"><div class="lbl">Device memory (browser-reported) <span class="b m">Measured</span></div><div class="big" id="o-mem">–</div></div>
+<div class="card"><div class="lbl">Tasks run locally this session <span class="b m">Measured</span></div><div class="big" id="o-n">0</div></div>
+<div class="card"><div class="lbl">Sensitive items masked this session <span class="b m">Measured</span></div><div class="big" id="o-p">0</div></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>How a request flows</h3>
+<div class="flow"><span>User input</span><i>→</i><span>Privacy Guardian</span><i>→</i><span>Task analysis</span><i>→</i><span>Edge AI Engine</span><i>→</i><span>Resource Monitor</span><i>→</i><span>Fairness check</span><i>→</i><span>Smart Optimizer</span><i>→</i><span>Dashboard</span></div></div>
+<div class="note">This is a frontend prototype. The model is a small word-score classifier that runs in your browser. The next step is replacing it with your Python and scikit-learn backend.</div>
+</section>
+
+<section id="edge" hidden>
+<h2>Edge AI prediction</h2>
+<p class="sub">Classify the sentiment of a message on this device. Nothing is sent anywhere.</p>
+<div class="card">
+<label for="e-in" class="lbl">Text to analyse</label>
+<textarea id="e-in">The delivery was quick and the support team was helpful, but the packaging was poor.</textarea>
+<button class="btn" id="e-run">Run on device</button>
+<div class="cmp">
+<div class="card"><h3>Local result <span class="b m">Measured</span></h3><div class="big" id="e-lab">–</div><div class="lbl" id="e-conf"></div><div class="lbl">Time taken</div><div class="big" id="e-t">–</div></div>
+<div class="card"><h3>Cloud estimate <span class="b s">Simulated</span></h3><div class="lbl">Assumes a fixed 280 ms network round trip plus the same compute time. Replace with a real API call to compare honestly.</div><div class="big" id="e-c">–</div></div>
+</div>
+</div>
+</section>
+
+<section id="res" hidden>
+<h2>Resource monitor</h2>
+<p class="sub">Browser-based readings. A Python backend using psutil will report real system CPU and RAM.</p>
+<div class="grid">
+<div class="card"><div class="lbl">JS memory in use <span class="b m">Measured</span></div><div class="big" id="r-heap">n/a</div><div class="lbl" id="r-heapn"></div></div>
+<div class="card"><div class="lbl">Main thread delay <span class="b m">Measured</span></div><div class="big" id="r-lag">–</div><div class="lbl">Higher means the page is busy.</div></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>Main thread delay, last 60 seconds (ms)</h3><canvas id="cv" width="900" height="150"></canvas>
+<button class="btn alt" id="r-load">Run a heavy task for 2 seconds</button></div>
+</section>
+
+<section id="priv" hidden>
+<h2>Privacy Guardian</h2>
+<p class="sub">Finds sensitive details and masks them before any text could leave the device.</p>
+<div class="card">
+<label for="p-in" class="lbl">Text to check</label>
+<textarea id="p-in">Hi, I'm Priya. Reach me at priya.k@example.com or +91 98765 43210. My Aadhaar is 2345 6789 0123 and PAN ABCDE1234F. Card 4111 1111 1111 1111.</textarea>
+<button class="btn" id="p-run">Scan and mask</button>
+<div class="cmp">
+<div class="card"><h3>Detected</h3><div class="out" id="p-det">–</div></div>
+<div class="card"><h3>Safe to share</h3><div class="out" id="p-out">–</div></div>
+</div>
+<div class="wrap"><table id="p-tab" style="margin-top:12px"></table></div>
+</div>
+</section>
+
+<section id="fair" hidden>
+<h2>Fairness checker</h2>
+<p class="sub">Trains a simple threshold model on generated loan data and compares results for two groups.</p>
+<div class="card">
+<div class="row"><div style="flex:1;min-width:200px"><label class="lbl" for="f-bias">Data skew against Group B: <b id="f-bv">25</b>%</label><input type="range" id="f-bias" min="0" max="60" value="25"></div>
+<button class="btn" id="f-run" style="margin:0">Evaluate</button></div>
+<p class="lbl">Dataset <span class="b s">Simulated</span> Metrics <span class="b m">Measured</span> on that dataset</p>
+<div class="wrap"><table><thead><tr><th>Group</th><th>Accuracy</th><th>Approval rate</th></tr></thead><tbody id="f-tab"></tbody></table></div>
+<div id="f-verdict" class="rec"></div>
+</div>
+</section>
+
+<section id="opt" hidden>
+<h2>Smart optimizer</h2>
+<p class="sub">Describe the task. SmartEdge recommends where and how to run it, and explains why.</p>
+<div class="card">
+<div class="grid">
+<div><label class="lbl" for="o-task">Task</label><select id="o-task"><option value="class">Short text classification</option><option value="sum">Summarise a long document</option><option value="gen">Open-ended text generation</option><option value="tab">Tabular prediction</option></select></div>
+<div><label class="lbl" for="o-size">Input size</label><select id="o-size"><option value="s">Under 1,000 words</option><option value="m">1,000 to 20,000 words</option><option value="l">Over 20,000 words</option></select></div>
+<div><label class="lbl" for="o-priv">Contains personal data?</label><select id="o-priv"><option value="y">Yes</option><option value="n">No</option></select></div>
+<div><label class="lbl" for="o-net">Connection</label><select id="o-net"><option value="on">Online</option><option value="off">Offline or slow</option></select></div>
+</div>
+<button class="btn" id="o-run">Recommend</button>
+<div id="o-res"></div>
+</div>
+</section>
+
+</main>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var tabs=[["overview","Overview"],["edge","Edge AI"],["res","Resources"],["priv","Privacy Guardian"],["fair","Fairness"],["opt","Optimizer"]];
+var nav=$("tabs");
+tabs.forEach(function(t,i){var b=document.createElement("button");b.textContent=t[1];b.setAttribute("role","tab");b.setAttribute("aria-selected",i==0);b.onclick=function(){show(t[0])};b.dataset.t=t[0];nav.appendChild(b)});
+function show(id){tabs.forEach(function(t){$(t[0]).hidden=t[0]!==id});[].forEach.call(nav.children,function(b){b.setAttribute("aria-selected",b.dataset.t===id)})}
+var nTasks=0,nPriv=0;
+$("o-cpu").textContent=navigator.hardwareConcurrency||"n/a";
+$("o-mem").textContent=navigator.deviceMemory?navigator.deviceMemory+" GB":"n/a";
+
+// Edge AI: tiny word-score model
+var W={good:2,great:3,excellent:3,quick:1.5,fast:1.5,helpful:2,love:3,happy:2,easy:1.5,amazing:3,nice:1.5,best:2.5,smooth:1.5,friendly:2,
+bad:-2,poor:-2,slow:-1.5,terrible:-3,awful:-3,hate:-3,broken:-2.5,worst:-3,late:-1.5,rude:-2.5,confusing:-1.5,disappointed:-2.5,useless:-2.5,expensive:-1};
+function predict(t){var w=t.toLowerCase().match(/[a-z']+/g)||[],s=0,hits=0,neg=false;
+w.forEach(function(x){if(x==="not"||x==="never"||x==="no"){neg=true;return}if(W[x]){s+=neg?-W[x]:W[x];hits++}neg=false});
+var p=1/(1+Math.exp(-s/2));return{p:p,hits:hits,label:hits==0?"Neutral":(p>=.55?"Positive":(p<=.45?"Negative":"Mixed"))}}
+$("e-run").onclick=function(){var t=$("e-in").value;var a=performance.now();var r,k;for(k=0;k<200;k++)r=predict(t);var ms=(performance.now()-a)/200;
+$("e-lab").textContent=r.label;$("e-conf").textContent="Positive score "+(r.p*100).toFixed(0)+"%, "+r.hits+" scored words";
+$("e-t").textContent=ms.toFixed(3)+" ms";$("e-c").textContent=(ms+280).toFixed(0)+" ms";nTasks++;$("o-n").textContent=nTasks};
+
+// Resource monitor
+var lag=[],last=performance.now();
+setInterval(function(){var n=performance.now(),d=Math.max(0,n-last-250);last=n;lag.push(d);if(lag.length>240)lag.shift();
+$("r-lag").textContent=d.toFixed(0)+" ms";draw();
+if(performance.memory){var u=performance.memory.usedJSHeapSize/1048576;$("r-heap").textContent=u.toFixed(1)+" MB";$("r-heapn").textContent="of "+(performance.memory.jsHeapSizeLimit/1048576).toFixed(0)+" MB limit"}
+else{$("r-heapn").textContent="Not reported by this browser. Try Chrome or Edge."}},250);
+function draw(){var c=$("cv"),x=c.getContext("2d"),W2=c.width,H=c.height;x.clearRect(0,0,W2,H);
+var s=getComputedStyle(document.documentElement);x.strokeStyle=s.getPropertyValue("--acc").trim()||"#0E7C6B";x.lineWidth=2;x.beginPath();
+var mx=Math.max(20,Math.max.apply(null,lag));lag.forEach(function(v,i){var px=i/239*W2,py=H-6-(v/mx)*(H-14);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()}
+$("r-load").onclick=function(){var e=performance.now()+2000;setTimeout(function(){while(performance.now()<e){Math.sqrt(Math.random())}},30)};
+
+// Privacy Guardian
+var P=[["Email",/[\w.+-]+@[\w-]+\.[\w.]+/g,"[EMAIL]"],["Card number",/\b(?:\d[ -]?){13,16}\b/g,"[CARD]"],["Aadhaar",/\b\d{4}\s\d{4}\s\d{4}\b/g,"[AADHAAR]"],["PAN",/\b[A-Z]{5}\d{4}[A-Z]\b/g,"[PAN]"],["Phone",/(?:\+\d{1,3}[ -]?)?\b\d{5}[ -]?\d{5}\b/g,"[PHONE]"]];
+function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+$("p-run").onclick=function(){var t=$("p-in").value,out=t,rows=[],tot=0;
+P.forEach(function(p){var m=out.match(p[1])||[];if(m.length){rows.push([p[0],m.length,p[2]]);tot+=m.length;out=out.replace(p[1],"\u0001"+p[2]+"\u0002")}});
+var det=esc(t);P.forEach(function(p){det=det.replace(p[1],function(m){return"<mark>"+m+"</mark>"})});
+$("p-det").innerHTML=det;$("p-out").innerHTML=esc(out).replace(/\u0001/g,'<span class="masked">').replace(/\u0002/g,"</span>");
+$("p-tab").innerHTML=rows.length?"<tr><th>Type</th><th>Found</th><th>Replaced with</th></tr>"+rows.map(function(r){return"<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td></tr>"}).join(""):"<tr><td>No sensitive items found.</td></tr>";
+nPriv+=tot;$("o-p").textContent=nPriv};
+
+// Fairness
+function rng(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296}}
+$("f-bias").oninput=function(){$("f-bv").textContent=this.value};
+$("f-run").onclick=function(){var skew=+$("f-bias").value/100,r=rng(7),N=500,data=[];
+["A","B"].forEach(function(g){for(var i=0;i<N;i++){var score=r()*100,truth=score>50?1:0;var noisy=score-(g==="B"?skew*40:0)+(r()-.5)*20;data.push({g:g,truth:truth,pred:noisy>50?1:0})}});
+var res={};["A","B"].forEach(function(g){var d=data.filter(function(x){return x.g===g});res[g]={acc:d.filter(function(x){return x.pred===x.truth}).length/d.length,sel:d.filter(function(x){return x.pred===1}).length/d.length}});
+$("f-tab").innerHTML=["A","B"].map(function(g){return"<tr><td>Group "+g+"</td><td>"+(res[g].acc*100).toFixed(1)+"%</td><td>"+(res[g].sel*100).toFixed(1)+"%</td></tr>"}).join("");
+var gap=Math.abs(res.A.acc-res.B.acc)*100,ratio=res.B.sel/res.A.sel;var bad=gap>5||ratio<.8;
+$("f-verdict").style.borderColor=bad?"var(--bad)":"var(--acc)";
+$("f-verdict").innerHTML="<b>"+(bad?"Unfair gap found.":"Within the set limits.")+"</b><br>Accuracy gap "+gap.toFixed(1)+" points (limit 5). Approval ratio B to A "+ratio.toFixed(2)+" (limit 0.80)."+(bad?" Rebalance the training data, or tune a separate threshold for each group, then test again.":"")};
+$("f-run").click();
+
+// Optimizer
+$("o-run").onclick=function(){var t=$("o-task").value,s=$("o-size").value,pv=$("o-priv").value==="y",off=$("o-net").value==="off";
+var where,model,why=[];
+if(t==="class"||t==="tab"){where="Run on device";model=t==="tab"?"Small tree model (scikit-learn)":"Distilled text classifier or word-score model";why.push("A small model is enough for this task, so a large cloud model would waste compute.")}
+else if(t==="sum"&&s!=="l"){where="Run on device";model="Compact summariser, about 100M to 500M parameters";why.push("Medium inputs fit a compact model that runs locally.")}
+else{where=(pv||off)?"Run on device, with limits":"Use the cloud";model=(pv||off)?"Small quantised language model":"Large language model";why.push(t==="gen"?"Open-ended generation needs a larger model for quality.":"Very long inputs exceed what a small local model can handle well.")}
+if(pv){why.push("Personal data stays on the device, and masked text is the only thing allowed to leave.");if(where==="Use the cloud")where="Mask first, then use the cloud"}
+if(off)why.push("A weak connection makes local processing more reliable.");
+$("o-res").innerHTML='<div class="rec"><div class="lbl">Recommended</div><div class="big">'+where+'</div><p><b>Model:</b> '+model+'</p><ul>'+why.map(function(w){return"<li>"+w+"</li>"}).join("")+'</ul></div><div class="note">Rule-based recommendation. Measure real energy use before claiming any savings.</div>'};
+$("o-run").click();$("e-run").click();$("p-run").click();
+})();
+</script>
+</body>
+</html>
