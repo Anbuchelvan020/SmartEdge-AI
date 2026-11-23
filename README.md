@@ -24,7 +24,7 @@ cd smartedge-ai
 pip install -r requirements.txt
 streamlit run app.py
 ```
-Requires Python 3.9 or newer. The app opens at http://localhost:8501.
+Requires Python 3.9 or newer.
 
 The standalone web UI prototype is in `prototype/index.html`. Open it in Chrome or Edge.
 
